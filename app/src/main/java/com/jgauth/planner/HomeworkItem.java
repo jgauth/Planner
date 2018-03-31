@@ -12,10 +12,10 @@ public class HomeworkItem {
     private Date itemDate;
     private String itemCourse;
 
-    public HomeworkItem(String iName, Date iDate, String iCourse) {
-        this.itemName = iName;
-        this.itemDate = iDate;
-        this.itemCourse = iCourse;
+    public HomeworkItem(String itemName, Date itemDate, String itemCourse) {
+        this.itemName = itemName;
+        this.itemDate = itemDate;
+        this.itemCourse = itemCourse;
     }
 
     public String getItemName() {
