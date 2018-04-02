@@ -10,7 +10,7 @@ import java.util.Date;
 public class Utils {
 
     public static final String DATE_FORMAT = "MM/d";
-    public static final String TIME_FORMAT = "h:mm a";
+    public static final String TIME_FORMAT = "h:mm:ss a";
 
     public static String formatDate(String formatString, Date date) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(formatString);

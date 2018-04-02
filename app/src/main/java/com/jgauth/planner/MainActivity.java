@@ -14,6 +14,7 @@ import android.view.MenuItem;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -76,6 +77,11 @@ public class MainActivity extends AppCompatActivity {
         for (int i=0; i < 50; i++) {
             String name = String.format("Item %d", i);
             String course = Integer.toString(i + 100);
+            try {
+                TimeUnit.MILLISECONDS.sleep(300);
+            } catch (Exception e) {
+
+            }
             Date date = new Date();
             list.add(new HomeworkItem(name, date, course));
         }
