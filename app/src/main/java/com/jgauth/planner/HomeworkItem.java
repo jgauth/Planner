@@ -1,5 +1,7 @@
 package com.jgauth.planner;
 
+import android.support.annotation.NonNull;
+
 import java.util.Date;
 import java.util.UUID;
 
@@ -7,44 +9,66 @@ import java.util.UUID;
  * Created by John Gauthier on 3/29/18.
  */
 
-public class HomeworkItem {
+public class HomeworkItem implements Comparable<HomeworkItem> {
 
-    private String itemName;
-    private Date itemDate;
-    private String itemCourse;
-    private UUID itemID;
+    private String mItemName;
+    private Date mItemDate;
+    private String mItemCourse;
+    private UUID mItemID;
 
     public HomeworkItem(String itemName, Date itemDate, String itemCourse) {
-        this.itemName = itemName;
-        this.itemDate = itemDate;
-        this.itemCourse = itemCourse;
-        this.itemID = UUID.randomUUID();
+        this.mItemName = itemName;
+        this.mItemDate = itemDate;
+        this.mItemCourse = itemCourse;
+        this.mItemID = UUID.randomUUID();
     }
 
+    // GETTERS
     public String getItemName() {
-        return this.itemName;
+        return this.mItemName;
     }
 
     public Date getItemDate() {
-        return this.itemDate;
+        return this.mItemDate;
     }
 
     public String getItemCourse() {
-        return this.itemCourse;
+        return this.mItemCourse;
     }
 
-    public UUID getID() { return this.itemID; }
+    public UUID getID() {
+        return this.mItemID;
+    }
 
 
+    // SETTERS
     public void setItemName(String name){
-        this.itemName = name;
+        this.mItemName = name;
     }
 
     public void setItemDate(Date date) {
-        this.itemDate = date;
+        this.mItemDate = date;
     }
 
     public void setItemCourse(String course) {
-        this.itemCourse = course;
+        this.mItemCourse = course;
+    }
+
+
+    // COMPARABLE IMPLEMENTATION
+    @Override
+    public int compareTo(@NonNull HomeworkItem homeworkItem) {
+        return this.mItemDate.compareTo(homeworkItem.getItemDate());
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (!(obj instanceof HomeworkItem))
+            return false;
+
+        HomeworkItem that = (HomeworkItem) obj;
+        return (this.getItemName().equals(that.getItemName()) && this.getItemDate() == that.getItemDate() && this.getItemCourse().equals(that.getItemCourse()));
     }
 }
