@@ -1,5 +1,7 @@
 package com.jgauth.planner;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
 import java.util.Date;
@@ -9,7 +11,7 @@ import java.util.UUID;
  * Created by John Gauthier on 3/29/18.
  */
 
-public class HomeworkItem implements Comparable<HomeworkItem> {
+public class HomeworkItem implements Comparable<HomeworkItem>, Parcelable {
 
     private String mItemName;
     private Date mItemDate;
@@ -71,4 +73,41 @@ public class HomeworkItem implements Comparable<HomeworkItem> {
         HomeworkItem that = (HomeworkItem) obj;
         return (this.getItemName().equals(that.getItemName()) && this.getItemDate() == that.getItemDate() && this.getItemCourse().equals(that.getItemCourse()));
     }
+
+    // PARCELABLE IMPLEMENTATION
+    // Implements parcelable to allow HomeworkItems to be attached to intents as an extra
+    private HomeworkItem(Parcel in) {
+        mItemName = in.readString();
+        long tempDate = in.readLong();
+        mItemDate = tempDate != -1 ? new Date(tempDate) : null;
+        mItemCourse = in.readString();
+        mItemID = (UUID) in.readValue(UUID.class.getClassLoader());
+    }
+
+    // describeContents() never used in this case
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(mItemName);
+        dest.writeLong(mItemDate != null ? mItemDate.getTime() : -1L);
+        dest.writeString(mItemCourse);
+        dest.writeValue(mItemID);
+    }
+
+    public static final Parcelable.Creator<HomeworkItem> CREATOR = new Parcelable.Creator<HomeworkItem>() {
+
+        @Override
+        public HomeworkItem[] newArray(int size) {
+            return new HomeworkItem[size];
+        }
+
+        @Override
+        public HomeworkItem createFromParcel(Parcel in) {
+            return new HomeworkItem(in);
+        }
+    };
 }
