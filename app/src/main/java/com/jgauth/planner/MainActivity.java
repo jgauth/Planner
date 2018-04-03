@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
 
         ArrayList<HomeworkItem> list = new ArrayList<>();
 
-        for (int i=0; i < 50; i++) {
+        for (int i=0; i < 10; i++) {
             String name = String.format("Item %d", i);
             String course = Integer.toString(i + 100);
             Date date = new Date(i);
