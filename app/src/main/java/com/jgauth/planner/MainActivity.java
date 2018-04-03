@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,6 +23,11 @@ public class MainActivity extends AppCompatActivity {
 //    private RecyclerView.Adapter mAdapter;
 //    private RecyclerView.LayoutManager mLayoutManager;
 
+    private static final int CREATE_ITEM_REQUEST = 100;
+    public static final String EXTRA_HOMEWORKITEM = "com.jgauth.planner.HOMEWORKITEM";
+    private static final String TAG = "MainActivity";
+    private ItemListAdapter mAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,17 +41,25 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, AddItemActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, CREATE_ITEM_REQUEST);
             }
         });
 
-        ItemListAdapter adapter = new ItemListAdapter(generateList());
+        mAdapter = new ItemListAdapter(generateList());
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.main_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         // using because changes in content do not change the layout size of recycler view. Improves performance.
         recyclerView.setHasFixedSize(true);
-        recyclerView.setAdapter(adapter);
+        recyclerView.setAdapter(mAdapter);
 
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK && requestCode == CREATE_ITEM_REQUEST) {
+            HomeworkItem item = data.getParcelableExtra(EXTRA_HOMEWORKITEM);
+            mAdapter.addHomeworkItem(item);
+        }
     }
 
     @Override
@@ -77,12 +91,7 @@ public class MainActivity extends AppCompatActivity {
         for (int i=0; i < 50; i++) {
             String name = String.format("Item %d", i);
             String course = Integer.toString(i + 100);
-            try {
-                TimeUnit.MILLISECONDS.sleep(300);
-            } catch (Exception e) {
-
-            }
-            Date date = new Date();
+            Date date = new Date(i);
             list.add(new HomeworkItem(name, date, course));
         }
         return list;
