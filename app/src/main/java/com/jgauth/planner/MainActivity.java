@@ -27,7 +27,18 @@ public class MainActivity extends AppCompatActivity {
     private static final int CREATE_ITEM_REQUEST = 100;
     public static final String EXTRA_HOMEWORKITEM = "com.jgauth.planner.HOMEWORKITEM";
     private static final String TAG = "MainActivity";
+
+    private FloatingActionButton mFab;
     private ItemListAdapter mAdapter;
+    private RecyclerView.OnScrollListener mOnScrollListener = new RecyclerView.OnScrollListener() {
+        @Override
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            if (dy > 0)
+                mFab.hide();
+            else if (dy < -5)
+                mFab.show();
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,8 +48,8 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        mFab = (FloatingActionButton) findViewById(R.id.fab);
+        mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, AddItemActivity.class);
@@ -56,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
         // using because changes in content do not change the layout size of recycler view. Improves performance.
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(mAdapter);
+        recyclerView.addOnScrollListener(mOnScrollListener);
 
     }
 
@@ -93,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
 
         ArrayList<HomeworkItem> list = new ArrayList<>();
 
-        for (int i=0; i < 10; i++) {
+        for (int i=0; i < 20; i++) {
             String name = String.format("Item %d", i);
             String course = Integer.toString(i + 100);
             Date date = new Date(i);
