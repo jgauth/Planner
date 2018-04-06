@@ -3,11 +3,11 @@ package com.jgauth.planner;
 import android.support.v7.util.SortedList;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.util.SortedListAdapterCallback;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.view.View;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,8 +18,7 @@ public class ItemListAdapter extends RecyclerView.Adapter {
 
     private SortedList<HomeworkItem> mItems;
 
-
-    public ItemListAdapter(List<HomeworkItem> items) {
+    public ItemListAdapter() {
 
         mItems = new SortedList<>(HomeworkItem.class, new SortedListAdapterCallback<HomeworkItem>(this) {
 
@@ -52,23 +51,7 @@ public class ItemListAdapter extends RecyclerView.Adapter {
 //            public void onChanged(int position, int count) {
 //                super.onChanged(position, count);
 //            }
-
-
         });
-
-        for (HomeworkItem item: items) {
-            mItems.beginBatchedUpdates(); // Using beginBatchUpdates() calls onInserted(int, int) only once
-            mItems.add(item);
-            mItems.endBatchedUpdates();
-        }
-    }
-
-    public void addHomeworkItem(HomeworkItem item) {
-        mItems.add(item);
-    }
-
-    public void removeHomeworkitem(HomeworkItem item) {
-        mItems.remove(item);
     }
 
     @Override
@@ -92,5 +75,29 @@ public class ItemListAdapter extends RecyclerView.Adapter {
     @Override
     public int getItemViewType(int position) {
         return R.layout.item_view;
+    }
+
+    public int addHomeworkItem(HomeworkItem item) {
+        return mItems.add(item);
+    }
+
+    public void addAll(List<HomeworkItem> items) {
+        mItems.beginBatchedUpdates();
+        for (HomeworkItem item : items) {
+            mItems.add(item);
+        }
+        mItems.endBatchedUpdates();
+    }
+
+    public HomeworkItem getHomeworkItem(int position) {
+        return mItems.get(position);
+    }
+
+    public boolean removeHomeworkItem(HomeworkItem item) {
+        return mItems.remove(item);
+    }
+
+    public HomeworkItem removeHomeworkItemAt(int position) {
+        return mItems.removeItemAt(position);
     }
 }
