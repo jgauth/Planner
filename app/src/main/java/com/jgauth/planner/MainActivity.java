@@ -15,6 +15,7 @@ import android.view.MenuItem;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
@@ -45,7 +46,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        mAdapter = new ItemListAdapter(generateList());
+
+//        mAdapter = new ItemListAdapter(generateList());
+        mAdapter = new ItemListAdapter();
+        mAdapter.addAll(generateList());
+
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.main_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         // using because changes in content do not change the layout size of recycler view. Improves performance.
