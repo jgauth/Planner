@@ -8,14 +8,17 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.view.View;
 
+import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersAdapter;
+
 import java.util.List;
 
 /**
  * Created by john on 3/29/18.
  */
 
-public class ItemListAdapter extends RecyclerView.Adapter {
+public class ItemListAdapter extends RecyclerView.Adapter implements StickyRecyclerHeadersAdapter {
 
+    private static final String TAG = "ItemListAdapter";
     private SortedList<HomeworkItem> mItems;
 
     public ItemListAdapter() {
@@ -34,7 +37,7 @@ public class ItemListAdapter extends RecyclerView.Adapter {
 
             @Override
             public boolean areItemsTheSame(HomeworkItem item1, HomeworkItem item2) {
-                return item1.getID().equals(item2.getID());
+                return item1.getId().equals(item2.getId());
             }
 
 //            @Override
@@ -54,28 +57,7 @@ public class ItemListAdapter extends RecyclerView.Adapter {
         });
     }
 
-    @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_view, parent, false);
-        return new ViewHolder(v);
-    }
-
-    @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-
-        ((ViewHolder) holder).bindData(mItems.get(position));
-    }
-
-    @Override
-    public int getItemCount() {
-        return mItems.size();
-    }
-
-    @Override
-    public int getItemViewType(int position) {
-        return R.layout.item_view;
-    }
+    // Sorted list helper methods
 
     public int addHomeworkItem(HomeworkItem item) {
         return mItems.add(item);
@@ -99,5 +81,48 @@ public class ItemListAdapter extends RecyclerView.Adapter {
 
     public HomeworkItem removeHomeworkItemAt(int position) {
         return mItems.removeItemAt(position);
+    }
+
+
+    // Item view holder methods
+    @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_view, parent, false);
+        return new ViewHolder(v);
+    }
+
+    @Override
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+
+        ((ViewHolder) holder).bindData(mItems.get(position));
+    }
+
+    @Override
+    public int getItemCount() {
+        return mItems.size();
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return R.layout.item_view;
+    }
+
+
+    // Sticky header methods
+    @Override
+    public long getHeaderId(int position) {
+        return mItems.get(position).getHeaderId();
+    }
+
+    @Override
+    public RecyclerView.ViewHolder onCreateHeaderViewHolder(ViewGroup parent) {
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.header_view, parent, false);
+        return new HeaderViewHolder(v);
+    }
+
+    @Override
+    public void onBindHeaderViewHolder(RecyclerView.ViewHolder holder, int position) {
+        ((HeaderViewHolder) holder).bindData(mItems.get(position));
     }
 }

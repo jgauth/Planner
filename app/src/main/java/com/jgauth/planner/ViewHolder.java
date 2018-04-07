@@ -37,6 +37,5 @@ public class ViewHolder extends RecyclerView.ViewHolder {
         Date date = item.getItemDate();
         dateTextView.setText(Utils.formatDate(Utils.DATE_FORMAT, date));
         timeTextView.setText(Utils.formatDate(Utils.TIME_FORMAT, date));
-
     }
 }

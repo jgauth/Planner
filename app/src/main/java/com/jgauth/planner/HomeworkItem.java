@@ -16,13 +16,13 @@ public class HomeworkItem implements Comparable<HomeworkItem>, Parcelable {
     private String mItemName;
     private Date mItemDate;
     private String mItemCourse;
-    private UUID mItemID;
+    private UUID mItemId;
 
     public HomeworkItem(String itemName, Date itemDate, String itemCourse) {
         this.mItemName = itemName;
         this.mItemDate = itemDate;
         this.mItemCourse = itemCourse;
-        this.mItemID = UUID.randomUUID();
+        this.mItemId = UUID.randomUUID();
     }
 
     // GETTERS
@@ -38,8 +38,12 @@ public class HomeworkItem implements Comparable<HomeworkItem>, Parcelable {
         return this.mItemCourse;
     }
 
-    public UUID getID() {
-        return this.mItemID;
+    public UUID getId() {
+        return this.mItemId;
+    }
+
+    public int getHeaderId() {
+        return Utils.getHeaderIdFromDate(mItemDate);
     }
 
 
@@ -81,7 +85,7 @@ public class HomeworkItem implements Comparable<HomeworkItem>, Parcelable {
         long tempDate = in.readLong();
         mItemDate = tempDate != -1 ? new Date(tempDate) : null;
         mItemCourse = in.readString();
-        mItemID = (UUID) in.readValue(UUID.class.getClassLoader());
+        mItemId = (UUID) in.readValue(UUID.class.getClassLoader());
     }
 
     // describeContents() never used in this case
@@ -95,7 +99,7 @@ public class HomeworkItem implements Comparable<HomeworkItem>, Parcelable {
         dest.writeString(mItemName);
         dest.writeLong(mItemDate != null ? mItemDate.getTime() : -1L);
         dest.writeString(mItemCourse);
-        dest.writeValue(mItemID);
+        dest.writeValue(mItemId);
     }
 
     public static final Parcelable.Creator<HomeworkItem> CREATOR = new Parcelable.Creator<HomeworkItem>() {
