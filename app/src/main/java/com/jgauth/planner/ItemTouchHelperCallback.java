@@ -1,6 +1,8 @@
 package com.jgauth.planner;
 
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
@@ -23,7 +25,19 @@ public class ItemTouchHelperCallback extends ItemTouchHelper.SimpleCallback {
 
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-        mAdapter.removeHomeworkItemAt(viewHolder.getAdapterPosition());
+        final HomeworkItem item = mAdapter.getHomeworkItemAt(viewHolder.getAdapterPosition());
+        String name = item.getItemName();
+        mAdapter.removeHomeworkItem(item);
+
+        Snackbar snackbar = Snackbar.make(viewHolder.itemView, name + " completed", Snackbar.LENGTH_LONG);
+        snackbar.setAction("Undo", new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mAdapter.addHomeworkItem(item);
+            }
+        });
+        snackbar.setActionTextColor(Color.YELLOW);
+        snackbar.show();
     }
 
     @Override
