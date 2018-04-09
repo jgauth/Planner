@@ -1,4 +1,4 @@
-package com.jgauth.planner;
+package com.jgauth.planner.Activities;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -10,6 +10,11 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
+
+import com.jgauth.planner.DatePickerFragment;
+import com.jgauth.planner.HomeworkItem;
+import com.jgauth.planner.R;
+import com.jgauth.planner.TimePickerFragment;
 
 import java.util.Date;
 import java.util.GregorianCalendar;

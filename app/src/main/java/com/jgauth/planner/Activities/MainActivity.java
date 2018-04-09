@@ -1,4 +1,4 @@
-package com.jgauth.planner;
+package com.jgauth.planner.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,6 +13,10 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.jgauth.planner.HomeworkItem;
+import com.jgauth.planner.ItemListAdapter;
+import com.jgauth.planner.ItemTouchHelperCallback;
+import com.jgauth.planner.R;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
 import java.util.ArrayList;
 import java.util.Calendar;
