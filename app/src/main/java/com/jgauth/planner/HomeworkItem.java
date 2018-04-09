@@ -17,12 +17,14 @@ public class HomeworkItem implements Comparable<HomeworkItem>, Parcelable {
     private Date mItemDate;
     private String mItemCourse;
     private UUID mItemId;
+    private int mHeaderId;
 
     public HomeworkItem(String itemName, Date itemDate, String itemCourse) {
         this.mItemName = itemName;
         this.mItemDate = itemDate;
         this.mItemCourse = itemCourse;
         this.mItemId = UUID.randomUUID();
+        this.mHeaderId = Utils.getHeaderIdFromDate(mItemDate);
     }
 
     // GETTERS
@@ -43,7 +45,7 @@ public class HomeworkItem implements Comparable<HomeworkItem>, Parcelable {
     }
 
     public int getHeaderId() {
-        return Utils.getHeaderIdFromDate(mItemDate);
+        return mHeaderId;
     }
 
 
@@ -54,6 +56,7 @@ public class HomeworkItem implements Comparable<HomeworkItem>, Parcelable {
 
     public void setItemDate(Date date) {
         this.mItemDate = date;
+        this.mHeaderId = Utils.getHeaderIdFromDate(date);
     }
 
     public void setItemCourse(String course) {

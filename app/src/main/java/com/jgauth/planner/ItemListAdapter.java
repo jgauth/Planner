@@ -71,7 +71,7 @@ public class ItemListAdapter extends RecyclerView.Adapter implements StickyRecyc
         mItems.endBatchedUpdates();
     }
 
-    public HomeworkItem getHomeworkItem(int position) {
+    public HomeworkItem getHomeworkItemAt(int position) {
         return mItems.get(position);
     }
 
@@ -99,6 +99,12 @@ public class ItemListAdapter extends RecyclerView.Adapter implements StickyRecyc
     }
 
     @Override
+    public long getItemId(int position) {
+        HomeworkItem item = mItems.get(position);
+        return item.getId().hashCode();
+    }
+
+    @Override
     public int getItemCount() {
         return mItems.size();
     }
@@ -117,12 +123,14 @@ public class ItemListAdapter extends RecyclerView.Adapter implements StickyRecyc
 
     @Override
     public RecyclerView.ViewHolder onCreateHeaderViewHolder(ViewGroup parent) {
+
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.header_view, parent, false);
         return new HeaderViewHolder(v);
     }
 
     @Override
     public void onBindHeaderViewHolder(RecyclerView.ViewHolder holder, int position) {
+
         ((HeaderViewHolder) holder).bindData(mItems.get(position));
     }
 }

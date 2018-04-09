@@ -82,6 +82,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Set up adapter
         mAdapter = new ItemListAdapter();
+        mAdapter.setHasStableIds(true);
         mAdapter.addAll(generateDummyList());
         mRecyclerView.setAdapter(mAdapter);
 
