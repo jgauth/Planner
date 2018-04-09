@@ -4,6 +4,8 @@
     <string name="edit_name">Name</string>
     <string name="edit_course">Course</string>
 
+    <string name="complete_item">Complete</string>
+
     <string name="due_past">Overdue</string>
     <string name="due_today">Due Today</string>
     <string name="due_tomorrow">Due Tomorrow</string>

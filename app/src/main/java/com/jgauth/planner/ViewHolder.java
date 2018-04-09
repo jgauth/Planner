@@ -2,9 +2,11 @@ package com.jgauth.planner;
 
 import com.jgauth.planner.Utils;
 
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ListAdapter;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import org.w3c.dom.Text;
@@ -21,6 +23,8 @@ public class ViewHolder extends RecyclerView.ViewHolder {
     private TextView courseTextView;
     private TextView dateTextView;
     private TextView timeTextView;
+    private ConstraintLayout viewForeground;
+    private RelativeLayout viewBackground;
 
     public ViewHolder(View v) {
         super(v);
@@ -28,6 +32,9 @@ public class ViewHolder extends RecyclerView.ViewHolder {
         courseTextView = (TextView) v.findViewById(R.id.text_course);
         dateTextView = (TextView) v.findViewById(R.id.text_date);
         timeTextView = (TextView) v.findViewById(R.id.text_time);
+
+        viewForeground = (ConstraintLayout) v.findViewById(R.id.view_foreground);
+        viewBackground = (RelativeLayout) v.findViewById(R.id.view_background);
     }
 
     public void bindData(HomeworkItem item) {
@@ -37,5 +44,13 @@ public class ViewHolder extends RecyclerView.ViewHolder {
         Date date = item.getItemDate();
         dateTextView.setText(Utils.formatDate(Utils.DATE_FORMAT, date));
         timeTextView.setText(Utils.formatDate(Utils.TIME_FORMAT, date));
+    }
+
+    public ConstraintLayout getViewForeground() {
+        return this.viewForeground;
+    }
+
+    public RelativeLayout getViewBackground() {
+        return this.viewBackground;
     }
 }

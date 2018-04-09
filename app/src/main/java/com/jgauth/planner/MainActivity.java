@@ -8,6 +8,7 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
     private ItemListAdapter mAdapter;
+    private ItemTouchHelper mItemTouchHelper;
     private StickyRecyclerHeadersDecoration mStickHeadersDecor;
     private DividerItemDecoration mDividerItemDecoration;
     private FloatingActionButton mFab;
@@ -91,6 +93,10 @@ public class MainActivity extends AppCompatActivity {
         // Set up dividers decoration
         mDividerItemDecoration = new DividerItemDecoration(mRecyclerView.getContext(), ((LinearLayoutManager) mLayoutManager).getOrientation());
         mRecyclerView.addItemDecoration(mDividerItemDecoration);
+
+        // Set up ItemTouchHelper to provide swiping functionality
+        mItemTouchHelper = new ItemTouchHelper(new ItemTouchHelperCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT, mAdapter));
+        mItemTouchHelper.attachToRecyclerView(mRecyclerView);
     }
 
     @Override
