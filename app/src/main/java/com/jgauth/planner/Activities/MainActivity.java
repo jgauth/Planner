@@ -25,7 +25,8 @@ import java.util.Date;
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
-    private static final int CREATE_ITEM_REQUEST = 100;
+    public static final int CREATE_ITEM_REQUEST = 100;
+    public static final int EDIT_ITEM_REQUEST = 101;
     public static final String EXTRA_HOMEWORKITEM = "com.jgauth.planner.HOMEWORKITEM";
 
     private RecyclerView mRecyclerView;
@@ -55,12 +56,12 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    private RecyclerView.AdapterDataObserver mAdapterDataObserver = new RecyclerView.AdapterDataObserver() {
-        @Override
-        public void onChanged() {
-            mStickHeadersDecor.invalidateHeaders();
-        }
-    };
+//    private RecyclerView.AdapterDataObserver mAdapterDataObserver = new RecyclerView.AdapterDataObserver() {
+//        @Override
+//        public void onChanged() {
+//            mStickHeadersDecor.invalidateHeaders();
+//        }
+//    };
 
 
     @Override
@@ -81,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerView.addOnScrollListener(mOnScrollListener);
 
         // Set up adapter
-        mAdapter = new ItemListAdapter();
+        mAdapter = new ItemListAdapter(this);
         mAdapter.setHasStableIds(true);
         mAdapter.addAll(generateDummyList());
         mRecyclerView.setAdapter(mAdapter);
@@ -93,7 +94,13 @@ public class MainActivity extends AppCompatActivity {
         // Set up sticky headers decoration
         mStickHeadersDecor = new StickyRecyclerHeadersDecoration(mAdapter);
         mRecyclerView.addItemDecoration(mStickHeadersDecor);
-        mAdapter.registerAdapterDataObserver(mAdapterDataObserver);
+//        mAdapter.registerAdapterDataObserver(mAdapterDataObserver);
+        mAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+            @Override
+            public void onChanged() {
+                mStickHeadersDecor.invalidateHeaders();
+            }
+        });
 
         // Set up dividers decoration
         mDividerItemDecoration = new DividerItemDecoration(mRecyclerView.getContext(), ((LinearLayoutManager) mLayoutManager).getOrientation());
@@ -111,6 +118,8 @@ public class MainActivity extends AppCompatActivity {
         if (resultCode == RESULT_OK && requestCode == CREATE_ITEM_REQUEST) {
             HomeworkItem item = data.getParcelableExtra(EXTRA_HOMEWORKITEM);
             mAdapter.addHomeworkItem(item);
+        } else if (resultCode == RESULT_OK && requestCode == EDIT_ITEM_REQUEST) {
+            mAdapter.notifyDataSetChanged();
         }
     }
 

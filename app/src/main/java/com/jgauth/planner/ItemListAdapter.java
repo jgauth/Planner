@@ -1,5 +1,9 @@
 package com.jgauth.planner;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.util.SortedList;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.util.SortedListAdapterCallback;
@@ -7,9 +11,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.view.View;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
+import com.jgauth.planner.Activities.AddItemActivity;
+import com.jgauth.planner.Activities.MainActivity;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersAdapter;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -20,8 +29,11 @@ public class ItemListAdapter extends RecyclerView.Adapter implements StickyRecyc
 
     private static final String TAG = "ItemListAdapter";
     private SortedList<HomeworkItem> mItems;
+    private Context mContext;
 
-    public ItemListAdapter() {
+    public ItemListAdapter(Context context) {
+
+        this.mContext = context;
 
         mItems = new SortedList<>(HomeworkItem.class, new SortedListAdapterCallback<HomeworkItem>(this) {
 
@@ -93,7 +105,7 @@ public class ItemListAdapter extends RecyclerView.Adapter implements StickyRecyc
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
 
         ((ViewHolder) holder).bindData(mItems.get(position));
     }
@@ -133,4 +145,60 @@ public class ItemListAdapter extends RecyclerView.Adapter implements StickyRecyc
 
         ((HeaderViewHolder) holder).bindData(mItems.get(position));
     }
+
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
+
+        private TextView nameTextView;
+        private TextView courseTextView;
+        private TextView dateTextView;
+        private TextView timeTextView;
+        private ConstraintLayout viewForeground;
+        private RelativeLayout viewBackground;
+
+        public ViewHolder(View v) {
+            super(v);
+            nameTextView = (TextView) v.findViewById(R.id.text_name);
+            courseTextView = (TextView) v.findViewById(R.id.text_course);
+            dateTextView = (TextView) v.findViewById(R.id.text_date);
+            timeTextView = (TextView) v.findViewById(R.id.text_time);
+
+            viewForeground = (ConstraintLayout) v.findViewById(R.id.view_foreground);
+            viewBackground = (RelativeLayout) v.findViewById(R.id.view_background);
+
+            v.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int adapterPosition = ViewHolder.this.getAdapterPosition();
+                    if (adapterPosition != RecyclerView.NO_POSITION) {
+                        HomeworkItem item = mItems.get(ViewHolder.this.getAdapterPosition());
+                        Intent intent  = new Intent(mContext, AddItemActivity.class);
+                        intent.putExtra(MainActivity.EXTRA_HOMEWORKITEM, item);
+                        intent.putExtra("requestCode", MainActivity.EDIT_ITEM_REQUEST);
+                        ((Activity) mContext).startActivityForResult(intent, MainActivity.EDIT_ITEM_REQUEST);
+//                    Toast.makeText(view.getContext(),"item no:"+adapterPosition, Toast.LENGTH_SHORT).show();
+
+                    }
+                }
+            });
+        }
+
+        public void bindData(HomeworkItem item) {
+            nameTextView.setText(item.getItemName());
+            courseTextView.setText(item.getItemCourse());
+
+            Date date = item.getItemDate();
+            dateTextView.setText(Utils.formatDate(Utils.DATE_FORMAT, date));
+            timeTextView.setText(Utils.formatDate(Utils.TIME_FORMAT, date));
+        }
+
+        public ConstraintLayout getViewForeground() {
+            return this.viewForeground;
+        }
+
+        public RelativeLayout getViewBackground() {
+            return this.viewBackground;
+        }
+    }
+
 }

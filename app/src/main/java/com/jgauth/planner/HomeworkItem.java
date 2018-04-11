@@ -3,6 +3,7 @@ package com.jgauth.planner;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import java.util.Date;
 import java.util.UUID;
@@ -12,6 +13,8 @@ import java.util.UUID;
  */
 
 public class HomeworkItem implements Comparable<HomeworkItem>, Parcelable {
+
+    private static final String TAG = "HomeworkItem";
 
     private String mItemName;
     private Date mItemDate;
@@ -29,6 +32,8 @@ public class HomeworkItem implements Comparable<HomeworkItem>, Parcelable {
 
     // GETTERS
     public String getItemName() {
+        Log.i(TAG, "getItemName: "+this.mItemName);
+        Log.i(TAG, "getItemName: "+this.mItemId);
         return this.mItemName;
     }
 
@@ -52,6 +57,7 @@ public class HomeworkItem implements Comparable<HomeworkItem>, Parcelable {
     // SETTERS
     public void setItemName(String name){
         this.mItemName = name;
+        Log.i(TAG, "setItemName: "+name);
     }
 
     public void setItemDate(Date date) {

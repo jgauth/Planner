@@ -5,6 +5,7 @@ import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -15,6 +16,7 @@ import com.jgauth.planner.DatePickerFragment;
 import com.jgauth.planner.HomeworkItem;
 import com.jgauth.planner.R;
 import com.jgauth.planner.TimePickerFragment;
+import com.jgauth.planner.Utils;
 
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -26,6 +28,10 @@ import java.util.GregorianCalendar;
 public class AddItemActivity extends AppCompatActivity implements TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener {
 
     private static final String TAG = "AddItemActivity";
+
+    private boolean mEdit = false;
+    private Intent mIntent;
+    private HomeworkItem mHomeworkItem;
 
     private EditText mEditTextName;
     private EditText mEditTextCourse;
@@ -67,6 +73,17 @@ public class AddItemActivity extends AppCompatActivity implements TimePickerDial
 
         mTextViewTime = (TextView) findViewById(R.id.textView_time);
         mTextViewTime.setOnClickListener(timeOnClickListener);
+
+        mIntent = getIntent();
+        Bundle bundle = mIntent.getExtras();
+        if (bundle != null && bundle.getInt("requestCode") == MainActivity.EDIT_ITEM_REQUEST) {
+            mEdit = true;
+            mHomeworkItem = mIntent.getParcelableExtra(MainActivity.EXTRA_HOMEWORKITEM);
+            mEditTextName.setText(mHomeworkItem.getItemName());
+            mEditTextCourse.setText(mHomeworkItem.getItemCourse());
+            mTextViewDate.setText(Utils.formatDate(Utils.DATE_FORMAT, mHomeworkItem.getItemDate()));
+            mTextViewTime.setText(Utils.formatDate(Utils.TIME_FORMAT, mHomeworkItem.getItemDate()));
+        }
     }
 
     @Override
@@ -104,10 +121,20 @@ public class AddItemActivity extends AppCompatActivity implements TimePickerDial
         GregorianCalendar calendar = new GregorianCalendar(mYear, mMonth, mDayOfMonth, mHourOfDay, mMinute);
         Date date = calendar.getTime();
 
-        HomeworkItem homeworkItem = new HomeworkItem(name, date, course);
+        if (mEdit) {
+            mHomeworkItem.setItemName(name);
+            mHomeworkItem.setItemCourse(course);
+            mHomeworkItem.setItemDate(date);
+
+            Log.i(TAG, "sendItem: "+mHomeworkItem.getItemName());
+            Log.i(TAG, "sendItem: "+mHomeworkItem.getId());
+        } else {
+            mHomeworkItem = new HomeworkItem(name, date, course);
+            Log.i(TAG, "sendItem: "+mHomeworkItem.getHeaderId());
+        }
 
         Intent intent = new Intent();
-        intent.putExtra(MainActivity.EXTRA_HOMEWORKITEM, homeworkItem);
+        intent.putExtra(MainActivity.EXTRA_HOMEWORKITEM, mHomeworkItem);
 
         setResult(RESULT_OK, intent);
         finish();
