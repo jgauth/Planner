@@ -18,6 +18,7 @@ import com.jgauth.planner.R;
 import com.jgauth.planner.TimePickerFragment;
 import com.jgauth.planner.Utils;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
@@ -39,6 +40,11 @@ public class AddItemActivity extends AppCompatActivity implements TimePickerDial
     private TextView mTextViewDate;
     private TextView mTextViewTime;
 
+    private String mItemName;
+    private String mItemCourse;
+    private Date mItemDate;
+
+    private Calendar mCalendar = new GregorianCalendar();
     private int mYear;
     private int mMonth;
     private int mDayOfMonth;
@@ -79,10 +85,23 @@ public class AddItemActivity extends AppCompatActivity implements TimePickerDial
         if (bundle != null && bundle.getInt("requestCode") == MainActivity.EDIT_ITEM_REQUEST) {
             mEdit = true;
             mHomeworkItem = mIntent.getParcelableExtra(MainActivity.EXTRA_HOMEWORKITEM);
-            mEditTextName.setText(mHomeworkItem.getItemName());
-            mEditTextCourse.setText(mHomeworkItem.getItemCourse());
-            mTextViewDate.setText(Utils.formatDate(Utils.DATE_FORMAT, mHomeworkItem.getItemDate()));
-            mTextViewTime.setText(Utils.formatDate(Utils.TIME_FORMAT, mHomeworkItem.getItemDate()));
+
+            mItemName = mHomeworkItem.getItemName();
+            mItemCourse = mHomeworkItem.getItemCourse();
+            mItemDate = mHomeworkItem.getItemDate();
+
+            mCalendar.setTime(mItemDate);
+            mYear = mCalendar.get(Calendar.YEAR);
+            mMonth = mCalendar.get(Calendar.MONTH);
+            mDayOfMonth = mCalendar.get(Calendar.DAY_OF_MONTH);
+            mHourOfDay = mCalendar.get(Calendar.HOUR_OF_DAY);
+            mMinute = mCalendar.get(Calendar.MINUTE);
+
+            mEditTextName.setText(mItemName);
+            mEditTextCourse.setText(mItemCourse);
+
+            mTextViewDate.setText(Utils.formatDate(Utils.DATE_FORMAT, mItemDate));
+            mTextViewTime.setText(Utils.formatDate(Utils.TIME_FORMAT, mItemDate));
         }
     }
 
@@ -103,11 +122,26 @@ public class AddItemActivity extends AppCompatActivity implements TimePickerDial
 
     public void showTimePickerDialog(View view) {
         TimePickerFragment timePickerFragment = new TimePickerFragment();
+
+        if (mEdit) {
+            Bundle args = new Bundle();
+            args.putInt("hour", mHourOfDay);
+            args.putInt("minute", mMinute);
+            timePickerFragment.setArguments(args);
+        }
         timePickerFragment.show(getFragmentManager(), "timePicker");
     }
 
     public void showDatePickerDialog() {
         DatePickerFragment datePickerFragment = new DatePickerFragment();
+
+        if (mEdit) {
+            Bundle args = new Bundle();
+            args.putInt("year", mYear);
+            args.putInt("month", mMonth);
+            args.putInt("day", mDayOfMonth);
+            datePickerFragment.setArguments(args);
+        }
         datePickerFragment.show(getFragmentManager(), "datePicker");
     }
 
@@ -121,19 +155,18 @@ public class AddItemActivity extends AppCompatActivity implements TimePickerDial
         GregorianCalendar calendar = new GregorianCalendar(mYear, mMonth, mDayOfMonth, mHourOfDay, mMinute);
         Date date = calendar.getTime();
 
+        Intent intent = new Intent();
+
         if (mEdit) {
             mHomeworkItem.setItemName(name);
             mHomeworkItem.setItemCourse(course);
             mHomeworkItem.setItemDate(date);
 
-            Log.i(TAG, "sendItem: "+mHomeworkItem.getItemName());
-            Log.i(TAG, "sendItem: "+mHomeworkItem.getId());
+            intent.putExtra("position", mIntent.getIntExtra("position", -1));
         } else {
             mHomeworkItem = new HomeworkItem(name, date, course);
-            Log.i(TAG, "sendItem: "+mHomeworkItem.getHeaderId());
         }
 
-        Intent intent = new Intent();
         intent.putExtra(MainActivity.EXTRA_HOMEWORKITEM, mHomeworkItem);
 
         setResult(RESULT_OK, intent);

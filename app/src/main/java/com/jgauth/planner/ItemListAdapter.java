@@ -91,6 +91,10 @@ public class ItemListAdapter extends RecyclerView.Adapter implements StickyRecyc
         return mItems.remove(item);
     }
 
+    public void setHomeworkItemAt(int position, HomeworkItem item) {
+        mItems.updateItemAt(position, item);
+    }
+
     public HomeworkItem removeHomeworkItemAt(int position) {
         return mItems.removeItemAt(position);
     }
@@ -175,9 +179,8 @@ public class ItemListAdapter extends RecyclerView.Adapter implements StickyRecyc
                         Intent intent  = new Intent(mContext, AddItemActivity.class);
                         intent.putExtra(MainActivity.EXTRA_HOMEWORKITEM, item);
                         intent.putExtra("requestCode", MainActivity.EDIT_ITEM_REQUEST);
+                        intent.putExtra("position", adapterPosition);
                         ((Activity) mContext).startActivityForResult(intent, MainActivity.EDIT_ITEM_REQUEST);
-//                    Toast.makeText(view.getContext(),"item no:"+adapterPosition, Toast.LENGTH_SHORT).show();
-
                     }
                 }
             });

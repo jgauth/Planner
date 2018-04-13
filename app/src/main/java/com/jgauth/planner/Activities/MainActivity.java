@@ -9,6 +9,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -119,6 +120,9 @@ public class MainActivity extends AppCompatActivity {
             HomeworkItem item = data.getParcelableExtra(EXTRA_HOMEWORKITEM);
             mAdapter.addHomeworkItem(item);
         } else if (resultCode == RESULT_OK && requestCode == EDIT_ITEM_REQUEST) {
+            HomeworkItem item = data.getParcelableExtra(EXTRA_HOMEWORKITEM);
+            int position = data.getIntExtra("position", -1);
+            mAdapter.setHomeworkItemAt(position, item);
             mAdapter.notifyDataSetChanged();
         }
     }

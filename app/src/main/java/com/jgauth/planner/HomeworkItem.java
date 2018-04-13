@@ -57,7 +57,6 @@ public class HomeworkItem implements Comparable<HomeworkItem>, Parcelable {
     // SETTERS
     public void setItemName(String name){
         this.mItemName = name;
-        Log.i(TAG, "setItemName: "+name);
     }
 
     public void setItemDate(Date date) {
