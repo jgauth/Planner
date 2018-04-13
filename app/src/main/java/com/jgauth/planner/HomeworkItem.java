@@ -95,6 +95,7 @@ public class HomeworkItem implements Comparable<HomeworkItem>, Parcelable {
         mItemDate = tempDate != -1 ? new Date(tempDate) : null;
         mItemCourse = in.readString();
         mItemId = (UUID) in.readValue(UUID.class.getClassLoader());
+        mHeaderId = in.readInt();
     }
 
     // describeContents() never used in this case
@@ -109,6 +110,7 @@ public class HomeworkItem implements Comparable<HomeworkItem>, Parcelable {
         dest.writeLong(mItemDate != null ? mItemDate.getTime() : -1L);
         dest.writeString(mItemCourse);
         dest.writeValue(mItemId);
+        dest.writeInt(mHeaderId);
     }
 
     public static final Parcelable.Creator<HomeworkItem> CREATOR = new Parcelable.Creator<HomeworkItem>() {
