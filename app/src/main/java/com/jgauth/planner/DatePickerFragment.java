@@ -17,21 +17,32 @@ public class DatePickerFragment extends DialogFragment {
     private Activity mActivity;
     private DatePickerDialog.OnDateSetListener mListener;
 
+    private int mYear;
+    private int mMonth;
+    private int mDayOfMonth;
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         mActivity = activity;
         mListener = (DatePickerDialog.OnDateSetListener) activity;
+
+        Bundle args = getArguments();
+        if (args != null) {
+            mYear = args.getInt("year");
+            mMonth = args.getInt("month");
+            mDayOfMonth = args.getInt("day");
+        } else {
+            final Calendar calendar = Calendar.getInstance();
+            mYear = calendar.get(Calendar.YEAR);
+            mMonth = calendar.get(Calendar.MONTH);
+            mDayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+        }
     }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
-        final Calendar calendar = Calendar.getInstance();
-        int year = calendar.get(Calendar.YEAR);
-        int month = calendar.get(Calendar.MONTH);
-        int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
-
-        return new DatePickerDialog(mActivity, mListener, year, month, dayOfMonth);
+        return new DatePickerDialog(mActivity, mListener, mYear, mMonth, mDayOfMonth);
     }
 }

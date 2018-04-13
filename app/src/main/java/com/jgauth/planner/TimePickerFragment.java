@@ -6,6 +6,7 @@ import android.app.DialogFragment;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.text.format.DateFormat;
+import android.util.Log;
 
 import java.util.Calendar;
 
@@ -15,23 +16,33 @@ import java.util.Calendar;
 
 public class TimePickerFragment extends DialogFragment {
 
+    private static final String TAG = "TimePickerFragment";
+
     private Activity mActivity;
     private TimePickerDialog.OnTimeSetListener mListener;
+
+    private int mHour;
+    private int mMinute;
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         mActivity = activity;
         mListener = (TimePickerDialog.OnTimeSetListener) activity;
+
+        Bundle args = getArguments();
+        if (args != null) {
+            mHour = args.getInt("hour");
+            mMinute = args.getInt("minute");
+        } else {
+            final Calendar calendar = Calendar.getInstance();
+            mHour = calendar.get(Calendar.HOUR_OF_DAY);
+            mMinute = calendar.get(Calendar.MINUTE);
+        }
     }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-
-        final Calendar calendar = Calendar.getInstance();
-        int hour = calendar.get(Calendar.HOUR_OF_DAY);
-        int minute = calendar.get(Calendar.MINUTE);
-
-        return new TimePickerDialog(mActivity, mListener, hour, minute, DateFormat.is24HourFormat(mActivity));
+        return new TimePickerDialog(mActivity, mListener,mHour, mMinute, DateFormat.is24HourFormat(mActivity));
     }
 }
